@@ -5,7 +5,7 @@ using UnityEngine;
 public class CamScript : MonoBehaviour
 {
    public Transform camRig;
-    public float rotSpd;
+    public float rotSpd = 17;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +31,7 @@ public class CamScript : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (transform.rotation != targetRot)
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, 15);
+        if (camRig.rotation != targetRot)
+            camRig.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, 15);
     }
 }

@@ -42,6 +42,7 @@ public class PlayerMove : MonoBehaviour
         //     targetRot = Quaternion.Euler(thisRB.rotation.eulerAngles + getRot);
         //     rotTime = 0;
         // }
+        
     }
     float rotTime;
     void FixedUpdate()
