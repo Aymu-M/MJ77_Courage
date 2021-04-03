@@ -35,13 +35,13 @@ public class PlayerMove : MonoBehaviour
         // else
         // { numAccel -= Time.deltaTime; }
 
-        if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
-        {
-            // getRot.x = thisRB.rotation.x + (Input.GetAxis("Mouse Y") * -RotSpd);
-            getRot.y = thisRB.rotation.y + (Input.GetAxis("Mouse X") * RotSpd);
-            targetRot = Quaternion.Euler(thisRB.rotation.eulerAngles + getRot);
-            rotTime = 0;
-        }
+        // if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
+        // {
+        //     // getRot.x = thisRB.rotation.x + (Input.GetAxis("Mouse Y") * -RotSpd);
+        //     getRot.y = thisRB.rotation.y + (Input.GetAxis("Mouse X") * RotSpd);
+        //     targetRot = Quaternion.Euler(thisRB.rotation.eulerAngles + getRot);
+        //     rotTime = 0;
+        // }
     }
     float rotTime;
     void FixedUpdate()
