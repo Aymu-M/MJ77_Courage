@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class PlatformSys : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void OnTriggerEnter(Collider col)
     {
-        
+        if (col.TryGetComponent<PlayerMove>(out PlayerMove thisPlyr))
+            thisPlyr.fncGetPlatform(transform);
     }
-
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerExit(Collider col)
     {
-        
+        if (col.TryGetComponent<PlayerMove>(out PlayerMove thisPlyr))
+            thisPlyr.fncRemPlatform(transform);
     }
 }
