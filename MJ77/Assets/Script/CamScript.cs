@@ -44,8 +44,9 @@ public class CamScript : MonoBehaviour
     void FixedUpdate()
     {
         if(camRig.position!=locPlyr.position)
-            transform.position = Vector3.SmoothDamp(transform.position, locPlyr.position, ref chaseVel, .5f, 20, Time.fixedDeltaTime);
+            transform.position = locPlyr.position;//Vector3.SmoothDamp(transform.position, locPlyr.position, ref chaseVel, .5f, 20, Time.fixedDeltaTime);
         if (camRig.rotation != targetRot)
             camRig.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, 1);
     }
+    
 }
