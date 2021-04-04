@@ -8,10 +8,11 @@ public class PlayerMove : MonoBehaviour
     public Transform locGround;
     public Rigidbody thisRB;
     public CamScript CamSys;
+    // public float Breath;
     public float CurMove, MvSpd, SprintSpd, RotSpd, Accelerate;
     public float JmpPwr, JmpCntr, JmpTime;
 
-    public bool isMove, isJump, isClimb, isGround;
+    public bool isMove, isJump, isClimb, isGround, inPlatform;
 
     Vector3 getInputMove { get { return new Vector3(Input.GetAxis("Horizontal"), 0, (Input.GetAxis("Vertical"))); } }
     Vector3 inputMove, getRot, getMove;
@@ -29,7 +30,7 @@ public class PlayerMove : MonoBehaviour
         inputMove = getInputMove;
         isMove = inputMove.sqrMagnitude >= .1f;
         isJump = Input.GetKey(KeyCode.Space);//Input.GetAxis("Jump") >= .1f;
-        CurMove = Input.GetKey(KeyCode.LeftShift) ? SprintSpd : MvSpd;
+        CurMove = Input.GetKey(KeyCode.LeftShift) ? MvSpd : MvSpd;
         // if (isMove)
         // {
         //     numAccel = CurMove != (Input.GetKey(KeyCode.LeftShift) ? SprintSpd : MvSpd) ? 0 : numAccel + Time.deltaTime;
@@ -51,7 +52,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (isMove)
         {
-            getMove = CamSys.camRig.TransformDirection(inputMove * Mathf.Lerp(0, CurMove, Accelerate * Accelerate));
+            getMove = CamSys.camRig.TransformDirection(inputMove * CurMove);// Mathf.Lerp(0, CurMove, Accelerate * Accelerate));
             thisRB.MovePosition(transform.position + (getMove * CurMove*Time.fixedDeltaTime));
             // thisRB.velocity = (inputMove * CurMove);// * Time.fixedDeltaTime;
             // if (thisRB.velocity.sqrMagnitude > getMove.sqrMagnitude)
@@ -123,5 +124,16 @@ public class PlayerMove : MonoBehaviour
 
     void OnCollisionStay(Collision col) {
         isGround = (col.collider.ClosestPoint(transform.position).y<=transform.position.y);
+    }
+
+    public void fncGetPlatform(Transform transPlatform){
+        transform.SetParent(transPlatform);
+        inPlatform = true;
+        print($"In platform, {transPlatform.name} at {Time.time.ToString("##.#")}");
+    }
+    public void fncRemPlatform(Transform transPlatform){
+        transform.parent = null;
+        inPlatform = false;
+        print($"Out of platform, {transPlatform.name} at {Time.time.ToString("##.#")}");
     }
 }

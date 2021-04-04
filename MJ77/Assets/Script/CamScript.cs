@@ -5,7 +5,7 @@ using UnityEngine;
 public class CamScript : MonoBehaviour
 {
    public Transform camRig, locPlyr;
-    public float rotSpd = 17, pitchLimit=45;
+    public float rotSpd = 17, pitchLimit=45, camSway=15;
     // Start is called before the first frame update
     void Start()
     {

@@ -153,10 +153,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fb765bad8ae43548b5e46ca3d17294c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  locGround: {fileID: 0}
   thisRB: {fileID: 82626363}
   CamSys: {fileID: 1763629008}
   CurMove: 0
-  MvSpd: 1
+  MvSpd: 2
   SprintSpd: 5
   RotSpd: 10
   Accelerate: 0
@@ -166,6 +167,8 @@ MonoBehaviour:
   isMove: 0
   isJump: 0
   isClimb: 0
+  isGround: 0
+  inPlatform: 0
 --- !u!54 &82626363
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1709,6 +1712,7 @@ MonoBehaviour:
   locPlyr: {fileID: 1340459530}
   rotSpd: 17
   pitchLimit: 45
+  camSway: 15
   targetRot: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1837156949
 GameObject:
