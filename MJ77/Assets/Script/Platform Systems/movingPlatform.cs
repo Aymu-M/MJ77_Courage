@@ -5,14 +5,22 @@ using UnityEngine;
 
 public class movingPlatform : MonoBehaviour
 {
-    public List<Transform> waypoint;
-    public int waypointIndex;
+    public float mvSpd=4;
+    public List<waypointData> waypoints;
+    public int waypointsIndex;
     IEnumerator moveOperation;
     bool isMove;
+    [System.Serializable]
+    public struct waypointData
+    {
+        public Transform locWaypoint;
+        public Vector3 pos { get { return locWaypoint.position; } }
+        public float travelTime;
+    }
     // Start is called before the first frame update
     void Start()
     {
-
+fncStartMove();
     }
     public void fncStartMove()
     {
@@ -26,17 +34,19 @@ public class movingPlatform : MonoBehaviour
     Vector3 velocity;
     IEnumerator fncMove()
     {
-        isMove=true;
+        isMove = true;
         while (isMove)
         {
-            fncChkWaypoint();
-            transform.position = Vector3.SmoothDamp(transform.position, waypoint[waypointIndex].position, ref velocity, 5, 1);
+            fncChkwaypoints();
+            transform.position = Vector3.SmoothDamp(transform.position, waypoints[waypointsIndex].pos,
+             ref velocity, waypoints[waypointsIndex].travelTime, mvSpd);
             yield return new WaitForFixedUpdate();
         }
-        isMove=false;
+        isMove = false;
     }
-    public void fncChkWaypoint(){
-        if((transform.position-waypoint[waypointIndex].position).sqrMagnitude<.5)
-            waypointIndex = (waypointIndex + 1) >= waypoint.Count ? 0 : waypointIndex+1;
+    public void fncChkwaypoints()
+    {
+        if ((transform.position - waypoints[waypointsIndex].pos).sqrMagnitude < .5)
+            waypointsIndex = (waypointsIndex + 1) >= waypoints.Count ? 0 : waypointsIndex + 1;
     }
 }
