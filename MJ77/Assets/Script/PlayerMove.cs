@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     public Transform locGround;
-    public Rigidbody thisRB;
+    public Rigidbody thisRB, platformRB;
     public CamScript CamSys;
     // public float Breath;
     public float CurMove, MvSpd, SprintSpd, RotSpd, Accelerate;
@@ -53,7 +53,7 @@ public class PlayerMove : MonoBehaviour
         if (isMove)
         {
             getMove = CamSys.camRig.TransformDirection(inputMove * CurMove);// Mathf.Lerp(0, CurMove, Accelerate * Accelerate));
-            thisRB.MovePosition(transform.position + (getMove * CurMove*Time.fixedDeltaTime));
+            thisRB.MovePosition(transform.localPosition + (getMove * CurMove*Time.fixedDeltaTime));
             // thisRB.velocity = (inputMove * CurMove);// * Time.fixedDeltaTime;
             // if (thisRB.velocity.sqrMagnitude > getMove.sqrMagnitude)
             // {
@@ -87,6 +87,9 @@ public class PlayerMove : MonoBehaviour
             if (thisRB.velocity.sqrMagnitude > 0)
                 thisRB.velocity = new Vector3(thisRB.velocity.x * .5f, thisRB.velocity.y, thisRB.velocity.z * .5f);
         }
+        // if(inPlatform&&isGround){
+        //     thisRB.velocity = thisRB.velocity+ platformRB.velocity;
+        // }
         if (isJump && (JmpCntr < JmpTime))
         {
             print($"jump: {isJump} at {Time.time.ToString("##.#")}");
@@ -123,17 +126,21 @@ public class PlayerMove : MonoBehaviour
     Vector3 deltaRot;
 
     void OnCollisionStay(Collision col) {
+        // if((transform.position-col.collider.ClosestPoint(transform.position)).sqrMagnitude<GetComponent<Collider>().bounds.extents.sqrMagnitude)
+        //     thisRB.velocity = Vector3.down;
         isGround = (col.collider.ClosestPoint(transform.position).y<=transform.position.y);
     }
 
-    public void fncGetPlatform(Transform transPlatform){
-        transform.SetParent(transPlatform);
+    public void fncGetPlatform(Rigidbody thisPlatform){
+        // transform.SetParent(thisPlatform.transform);
+        platformRB = thisPlatform;
         inPlatform = true;
-        print($"In platform, {transPlatform.name} at {Time.time.ToString("##.#")}");
+        print($"In platform, {thisPlatform.name} at {Time.time.ToString("##.#")}");
     }
-    public void fncRemPlatform(Transform transPlatform){
-        transform.parent = null;
+    public void fncRemPlatform(Rigidbody thisPlatform){
+        // transform.parent = null;
+        platformRB = null;
         inPlatform = false;
-        print($"Out of platform, {transPlatform.name} at {Time.time.ToString("##.#")}");
+        print($"Out of platform, {thisPlatform.name} at {Time.time.ToString("##.#")}");
     }
 }

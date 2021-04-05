@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[RequireComponent(typeof(Rigidbody))]
 public class movingPlatform : MonoBehaviour
 {
-    public float mvSpd=4;
+    public float mvSpd = 4, curSpd;
+    public Rigidbody thisRB;
     public List<waypointData> waypoints;
     public int waypointsIndex;
     IEnumerator moveOperation;
@@ -20,7 +21,7 @@ public class movingPlatform : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-fncStartMove();
+        fncStartMove();
     }
     public void fncStartMove()
     {
@@ -32,21 +33,39 @@ fncStartMove();
         StopCoroutine(moveOperation);
     }
     Vector3 velocity;
+    public float accel;
     IEnumerator fncMove()
     {
+        yield return null;
+        print("START MOVE");
         isMove = true;
+        curSpd = Vector3.Distance(transform.position, waypoints[waypointsIndex].pos) / waypoints[waypointsIndex].travelTime;
         while (isMove)
         {
             fncChkwaypoints();
-            transform.position = Vector3.SmoothDamp(transform.position, waypoints[waypointsIndex].pos,
-             ref velocity, waypoints[waypointsIndex].travelTime, mvSpd);
+            fncGetMove();
+            accel = accel > 1 ? 1 : accel + Time.fixedDeltaTime;
+            // transform.position = Vector3.SmoothDamp(transform.position, waypoints[waypointsIndex].pos,
+            //  ref velocity, waypoints[waypointsIndex].travelTime, mvSpd);
             yield return new WaitForFixedUpdate();
         }
         isMove = false;
+        print("END MOVE");
     }
     public void fncChkwaypoints()
     {
         if ((transform.position - waypoints[waypointsIndex].pos).sqrMagnitude < .5)
+        {
             waypointsIndex = (waypointsIndex + 1) >= waypoints.Count ? 0 : waypointsIndex + 1;
+            accel = 0;
+            curSpd = Vector3.Distance(transform.position, waypoints[waypointsIndex].pos) / waypoints[waypointsIndex].travelTime;
+        }
+    }
+    public void fncGetMove()
+    {
+        // thisRB.MovePosition(thisRB.position + ((waypoints[waypointsIndex].pos - thisRB.position).normalized * (curSpd * (accel * accel))));
+        thisRB.MovePosition(Vector3.SmoothDamp(thisRB.position, waypoints[waypointsIndex].pos,
+             ref velocity, waypoints[waypointsIndex].travelTime, mvSpd));
+        print("MOVING");
     }
 }
